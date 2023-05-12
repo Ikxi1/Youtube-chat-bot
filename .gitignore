@@ -4,3 +4,4 @@ math efficiency test.py
 data/
 data_test/
 __pycache__/
+*.pyc
