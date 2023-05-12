@@ -68,11 +68,13 @@ class Program:
 			if message_id not in files.message_ids:
 				# The timestamps don't work when you reload the script, they only then show the current time, not when the message was sent
 				timestamp = datetime.now().strftime("%H:%M:%S")
+
 				# Find username
 				username = message.find_element(By.CSS_SELECTOR, '#author-name').text
 				if username == "":
 					self.missed_name += 1
 					break
+
 				# Find message and emotes
 				try:
 					# Try to find the text of the message
@@ -100,6 +102,7 @@ class Program:
 						emote_index = html.index(emote.get_attribute('outerHTML'))
 						# Insert the emote at its original position in the message text
 						msg = msg[:emote_index] + ':' + alt_text + ':' + msg[emote_index:]
+
 				# Name substitutions
 				if username in files.exchange_names:
 					username = files.exchange_names.get(username)

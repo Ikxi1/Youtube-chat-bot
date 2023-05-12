@@ -78,20 +78,20 @@ class Files:
 			)
 
 		# Create raid ids file, if none exists
-		file_raid_ids = "raid_ids" + "_" + today + ".txt"
-		if not os.path.exists(file_raid_ids):
-			open(file_raid_ids, "w").close()
-			print("Created " + file_raid_ids)
+		self.file_raid_ids = dir_raid_ids + "raid_ids" + "_" + today + ".txt"
+		if not os.path.exists(self.file_raid_ids):
+			open(self.file_raid_ids, "w").close()
+			print("Created " + self.file_raid_ids)
 
 		# Read all raid_ids from file
-		with open(file_raid_ids, 'r') as f:
+		with open(self.file_raid_ids, 'r') as f:
 			self.raid_ids = set(line.strip() for line in f.readlines())
 
 
 		# Create blocked words file, if none exists
-		file_blocked_words = dir_data + "blocked_words.txt"
-		if not os.path.exists(file_blocked_words):
-			open("blocked_words.txt", "w").close()
+		self.file_blocked_words = dir_data + "blocked_words.txt"
+		if not os.path.exists(self.file_blocked_words):
+			open(self.file_blocked_words, "w").close()
 			print(
 				"Created blocked_words.txt\n"
 				"Consider adding words you want to block to the file\n"
@@ -99,14 +99,14 @@ class Files:
 			)
 
 		# Read all blocked words from file
-		with open('blocked_words.txt', 'r') as f:
+		with open(self.file_blocked_words, 'r') as f:
 			self.blocked_words = [line.strip() for line in f]
 
 
 		# Create commands file, if none exists
-		file_commands = dir_data + "commands.txt"
-		if not os.path.exists(file_commands):
-			open(file_commands, "w").close()
+		self.file_commands = dir_data + "commands.txt"
+		if not os.path.exists(self.file_commands):
+			open(self.file_commands, "w").close()
 			print(
 				"Created commands file\n"
 				"Consider adding commands to the file\n"
@@ -114,7 +114,7 @@ class Files:
 			)
 
 		# Read all commands from file
-		with open(file_commands, "r") as f:
+		with open(self.file_commands, "r") as f:
 			self.commands = {}
 			for line in f:
 				# Split the lines at µ
@@ -128,15 +128,15 @@ class Files:
 
 
 		# Read name exchange list
-		file_name_exchanges = dir_data + "name_exchanges.txt"
-		if not os.path.exists(file_name_exchanges):
-			open(file_name_exchanges, "w", encoding='utf-8').close()
+		self.file_name_exchanges = dir_data + "name_exchanges.txt"
+		if not os.path.exists(self.file_name_exchanges):
+			open(self.file_name_exchanges, "w", encoding='utf-8').close()
 			print(
 				"Created name exchange file\n"
 				"Consider adding names of people here that you want to replace with a nickname"
 			)
 
-		with open(file_name_exchanges, "r", encoding='utf-8') as f:
+		with open(self.file_name_exchanges, "r", encoding='utf-8') as f:
 			self.exchange_names = {}
 			for line in f:
 				parts = line.strip().split("µ")
@@ -163,5 +163,5 @@ class Files:
 	def write_raid_ids(self, raid_id):
 		# Method for writing raid IDs back to the file
 		self.raid_ids.add(raid_id)
-		with open('raid_ids.txt', 'w') as f:
+		with open(self.file_raid_ids, 'w') as f:
 			f.write('\n'.join(self.raid_ids))
