@@ -5,3 +5,4 @@ data/
 data_test/
 __pycache__/
 *.pyc
+.idea/
