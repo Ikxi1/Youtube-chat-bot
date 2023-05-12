@@ -10,6 +10,7 @@ import gc
 import pygame
 import pygame_gui
 from w_r_files import Files
+from ui import UI
 
 
 class Program:
@@ -148,13 +149,9 @@ class Program:
 				files.write_message_ids(message_id)
 
 
-class UI:
-	def __init__(self):
-		pass
-
-
 # Initiate and execute classes
 files = Files()
+ui = UI()
 program = Program()
 program.run_main()
 # Quit the pygame
