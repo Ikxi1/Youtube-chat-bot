@@ -1,0 +1,30 @@
+as with raid_ids, add comments also to a file, so that when reloading, it shows the original time stamps - done
+    just make sure, that it doesn't just fill up the files endlessly, if the script sees that the file is from a day ago, it makes a new file (don't have to delete the old files)
+
+I want all the messages with their time stamps saved to a file, also needs to save the message IDs - done (didn't have to write IDs in the same file)
+
+the messages in chat_messages.txt don't get written/read in the proper order - done
+    expected behaviour: when restarting the chat script, the messages are ordered based on their time stamps
+    this only works for messages send in a single day, or you will have to also write the unix time too
+    unix time might actually be a better way to do it, from the unix time you can then also derive the timestamps
+    and don't have to save them as strings separately
+
+- figure out how to deal with deleted messages
+    currently the script just breaks when a message gets deleted
+        no it doesn't, probably because all the messages get saved now
+
+    expected behaviour: the script continues and messages get deleted out of chat_messages.txt
+    and deleted from the console (might have to clear console/restart console and read messages from file again)
+        can't just delete a single line in the console, would have to do a console clear
+
+save chat_messages.txt and chat_ids.txt per date, so it doesn't load the one from last stream - done
+
+- use pygame for the loop and pygame_gui for a UI where you can add URLs, blocked words, name exchange, commands
+
+- make UI for the chat, so you have an option to not just have in inside the console
+
+- make commands work
+	need log in for that
+	save log in data in separate file, so it doesn't show in main file
+
+have name exchange list in a file - done
