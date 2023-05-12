@@ -17,32 +17,23 @@ class Program:
 	def __init__(self):
 		# Prepare normal window
 		pygame.init()
-		screen_width = 1000  # Screen width in pixels
-		screen_height = 1000  # Screen height in pixels
-		screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
+		self.screen_width = 1000  # Screen width in pixels
+		self.screen_height = 1000  # Screen height in pixels
+		self.screen = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.RESIZABLE)
 		pygame.display.set_caption("Youtube Chatbot by Ikxi")
 
 		self.running = True
-		self.clock = pygame.time.Clock
+		self.clock = pygame.time.Clock()
 		self.framerate = 30
 
 		self.missed_name = 0
 		self.raid = 0
 
-		# Prepare browser window
-		options = webdriver.ChromeOptions()
-		options.add_experimental_option('excludeSwitches', ['enable-logging'])
-
-		service = Service("chromedriver.exe")
-		self.driver = webdriver.Chrome(service=service, options=options)
-
-		# Youtube link
-		stream_id = "EX75DyJvE8g"
-		self.link = "https://www.youtube.com/live_chat?v=" + stream_id
+		self.chat_running = False
 
 	def run_main(self):
 		while self.running:
-			# time_delta = self.clock.tick(self.framerate) / 1000.0
+			time_delta = self.clock.tick(self.framerate) / 1000.0
 
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -53,10 +44,35 @@ class Program:
 					if event.key == pygame.K_g:
 						self.run_second()
 
+				# Trying to start the script after stopping it crashes
+				elif event.type == pygame_gui.UI_BUTTON_PRESSED:
+					if event.ui_element == ui.button_start and not self.chat_running:
+						self.run_second()
+						self.chat_running = True
+					elif event.ui_element == ui.button_stop and self.chat_running:
+						self.driver.quit()
+						self.chat_running = False
+
+				ui.manager.process_events(event)
+
+			self.screen.fill((0, 0, 0))
+			ui.manager.update(time_delta)
+			ui.manager.draw_ui(self.screen)
 			pygame.display.update()
 			gc.collect()
 
 	def run_second(self):
+		# Prepare and open the browser window
+		options = webdriver.ChromeOptions()
+		options.add_experimental_option('excludeSwitches', ['enable-logging'])
+
+		service = Service("chromedriver.exe")
+		self.driver = webdriver.Chrome(service=service, options=options)
+
+		# Youtube link
+		stream_id = "EX75DyJvE8g"
+		self.link = "https://www.youtube.com/live_chat?v=" + stream_id
+
 		# Get the latest list of messages
 		self.driver.get(self.link)
 		message_list = self.driver.find_elements(By.CSS_SELECTOR, 'yt-live-chat-text-message-renderer')
@@ -151,8 +167,8 @@ class Program:
 
 # Initiate and execute classes
 files = Files()
-ui = UI()
 program = Program()
+ui = UI(program.screen_width, program.screen_height)
 program.run_main()
 # Quit the pygame
 pygame.quit()
