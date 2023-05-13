@@ -1,3 +1,0 @@
-
-G
-math efficiency test.py,6\9\69ce21748550d81936ded168947908c345437571
