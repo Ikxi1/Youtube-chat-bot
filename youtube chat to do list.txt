@@ -31,3 +31,8 @@ save chat_messages.txt and chat_ids.txt per date, so it doesn't load the one fro
 	save log in data in separate file, so it doesn't show in main file
 
 have name exchange list in a file - done
+
+- use a different browser than chrome, something very very lightweight
+
+- check if you can open the files at the start of the script once and then close them at the end, so you don't have to open and close them every single time
+	see what's more efficient

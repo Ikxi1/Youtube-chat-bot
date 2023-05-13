@@ -21,3 +21,11 @@ class UI:
 			text="Stop chat",
 			manager=self.manager
 		)
+
+		# Button to reload the scraper
+		rect_button_reload = pygame.Rect(0, 100, 150, 50)
+		self.button_reload = pygame_gui.elements.UIButton(
+			relative_rect=rect_button_reload,
+			text="Reload chat",
+			manager=self.manager
+		)
