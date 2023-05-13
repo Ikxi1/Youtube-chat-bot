@@ -20,6 +20,9 @@ the messages in chat_messages.txt don't get written/read in the proper order - d
 save chat_messages.txt and chat_ids.txt per date, so it doesn't load the one from last stream - done
 
 - use pygame for the loop and pygame_gui for a UI where you can add URLs, blocked words, name exchange, commands
+	reload button, to quickly reload the chrome session, if it breaks
+	fix start stop bug (after stopping, cannot be started again)
+	text field for stream link (gets truncated to just the ID)
 
 - make UI for the chat, so you have an option to not just have in inside the console
 
