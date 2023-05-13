@@ -9,8 +9,10 @@ import re
 import gc
 import pygame
 import pygame_gui
+import time
 from w_r_files import Files
 from ui import UI
+from url import get_youtube_id
 
 pygame.init()
 
@@ -28,7 +30,9 @@ class Program:
 		self.framerate = 30
 
 		self.chat_running = False
-		print(self.chat_running)
+
+		self.stream_id = ''
+		self.valid_url = False
 
 	def run(self):
 		print("program running")
@@ -37,24 +41,23 @@ class Program:
 
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
+					self.chat_stop()
 					self.running = False
-					program.chat.driver.quit()
 				elif event.type == pygame.KEYDOWN:
 					if event.key == pygame.K_ESCAPE:
+						self.chat_stop()
 						self.running = False
-						program.chat.driver.quit()
 					if event.key == pygame.K_g and not self.chat_running:
-						self.chat = Chat()
-						self.chat_running = True
+						self.chat_run()
 
 				# Trying to start the script after stopping it crashes
 				elif event.type == pygame_gui.UI_BUTTON_PRESSED:
 					if event.ui_element == ui.button_start and not self.chat_running:
-						self.chat = Chat()
-						self.chat_running = True
+						self.chat_run()
 					elif event.ui_element == ui.button_stop and self.chat_running:
-						self.chat.driver.quit()
-						self.chat_running = False
+						self.chat_stop()
+					elif event.ui_element == ui.button_reload and self.chat_running:
+						self.chat_reload()
 
 				ui.manager.process_events(event)
 
@@ -65,7 +68,32 @@ class Program:
 			ui.manager.update(time_delta)
 			ui.manager.draw_ui(self.screen)
 			pygame.display.update()
-			gc.collect()
+
+	def chat_run(self):
+		url = ui.textfield_url.get_text()
+		self.valid_url, self.stream_id = get_youtube_id(url)
+		if self.valid_url:
+			ui.label_validurl.set_text("Valid URL")
+			self.chat = Chat()
+			self.chat_running = True
+		else:
+			ui.label_validurl.set_text("Invalid URL")
+
+	def chat_stop(self):
+		self.chat_running = False
+		self.chat.driver.quit()
+
+	def chat_reload(self):
+		self.chat_stop()
+		print("Reloading chat")
+		time.sleep(1)
+		print("3")
+		time.sleep(1)
+		print("2")
+		time.sleep(1)
+		print("1")
+		self.chat_run()
+		print("Chat reloaded")
 
 
 class Chat:
@@ -81,16 +109,13 @@ class Chat:
 		self.driver = webdriver.Chrome(service=service, options=options)
 
 		# Youtube link
-		stream_id = "EX75DyJvE8g"
-		self.link = "https://www.youtube.com/live_chat?v=" + stream_id
+		self.link = "https://www.youtube.com/live_chat?v=" + program.stream_id
 
 		# Get the latest list of messages
 		self.driver.get(self.link)
 
 		# Files being initiated
-		print("Files initiating")
 		self.files = Files()
-		print("Files initiated")
 
 	def run(self):
 		message_list = self.driver.find_elements(By.CSS_SELECTOR, 'yt-live-chat-text-message-renderer')
