@@ -6,3 +6,4 @@ data_test/
 __pycache__/
 *.pyc
 .idea/
+.idea/sonarlint/
