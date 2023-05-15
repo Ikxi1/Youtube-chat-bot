@@ -8,3 +8,4 @@ __pycache__/
 .idea/
 .idea/sonarlint/
 test/
+bot_login_keys.py
