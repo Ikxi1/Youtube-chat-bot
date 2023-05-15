@@ -103,7 +103,7 @@ class Files:
 		# Create commands file, if none exists
 		self.file_commands = dir_data + "commands.txt"
 		if not os.path.exists(self.file_commands):
-			open(self.file_commands, "w").close()
+			open(self.file_commands, "w", encoding='utf-8').close()
 			print(
 				"Created commands file\n"
 				"Consider adding commands to the file\n"
@@ -111,7 +111,7 @@ class Files:
 			)
 
 		# Read all commands from file
-		with open(self.file_commands, "r") as f:
+		with open(self.file_commands, "r", encoding='utf-8') as f:
 			self.commands = {}
 			for line in f:
 				# Split the lines at µ
@@ -122,7 +122,6 @@ class Files:
 				# Check if there are any characters
 				text = parts[1] if len(parts) > 1 else ""
 				self.commands[command] = text
-
 
 		# Read name exchange list
 		self.file_name_exchanges = dir_data + "name_exchanges.txt"

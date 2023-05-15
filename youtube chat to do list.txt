@@ -32,11 +32,16 @@ have name exchange list in a file - done
 - check if you can open the files at the start of the script once and then close them at the end, so you don't have to open and close them every single time
 	see what's more efficient
 
---- make clicking on things work
-	- make commands work
+make clicking on things work - done
+	make commands work - done
 		need login for that
 		save login data in separate file, so it doesn't show in main file
-	- make login work
-	- make better timestamps work
+	make login work - done
+	make better timestamps work - done
 
 -- use a different browser than chrome, something very very lightweight
+
+- current timestamps are sorted incorrectly
+	you need to add a in front oh all the hours 0-9
+
+- add @ to commands

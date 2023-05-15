@@ -1,8 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.keys import Keys
 import re
 from w_r_files_test import Files
+import bot_login
 
 
 class Chat:
@@ -13,6 +15,7 @@ class Chat:
 		# Prepare and open the browser window
 		options = webdriver.ChromeOptions()
 		options.add_experimental_option('excludeSwitches', ['enable-logging'])
+		options.add_argument("--mute-audio")
 
 		service = Service("chromedriver.exe")
 		self.driver = webdriver.Chrome(service=service, options=options)
@@ -30,6 +33,8 @@ class Chat:
 		self.timestamp_button.click()
 		self.timestamp_button = self.driver.find_element(By.XPATH, "/html/body/yt-live-chat-app/tp-yt-iron-dropdown/div/ytd-menu-popup-renderer/tp-yt-paper-listbox/ytd-menu-service-item-renderer[2]/tp-yt-paper-item")
 		self.timestamp_button.click()
+
+		bot_login.click_login(self.driver, stream_id)
 
 	def run(self):
 		message_list = self.driver.find_elements(
@@ -51,6 +56,10 @@ class Chat:
 				username = message.find_element(By.CSS_SELECTOR, '#author-name').text
 				if username == "":
 					self.missed_name += 1
+					break
+
+				if username == "Ikxi_Bot":
+					self.files.write_message_ids(message_id)
 					break
 
 				# Find message and emotes
@@ -92,10 +101,6 @@ class Chat:
 				if any(word in msg.lower() for word in self.files.blocked_words):
 					msg = "<filtered>"
 
-				# Check if message is a command
-				if msg in self.files.commands:
-					print("This is a command\nCommands are not implemented yet")
-
 				# Check for raids
 				if "raid" in msg and message_id not in self.files.raid_ids:
 					self.raid += 1
@@ -112,6 +117,12 @@ class Chat:
 
 				# Add full message to file
 				self.files.write_messages(full_message)
+
+				# Check if message is a command
+				if msg in self.files.commands:
+					text = self.files.commands.get(msg)
+					text_box = self.driver.find_element(By.XPATH, '//*[@id="input"]')
+					text_box.send_keys(text + Keys.RETURN)
 
 				# Print if a raid is happening
 				if self.raid >= 5:
