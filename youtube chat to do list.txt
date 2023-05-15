@@ -9,30 +9,33 @@ the messages in chat_messages.txt don't get written/read in the proper order - d
     unix time might actually be a better way to do it, from the unix time you can then also derive the timestamps
     and don't have to save them as strings separately
 
+save chat_messages.txt and chat_ids.txt per date, so it doesn't load the one from last stream - done
+
+have name exchange list in a file - done
+
 - figure out how to deal with deleted messages
     currently the script just breaks when a message gets deleted
         no it doesn't, probably because all the messages get saved now
-
     expected behaviour: the script continues and messages get deleted out of chat_messages.txt
     and deleted from the console (might have to clear console/restart console and read messages from file again)
         can't just delete a single line in the console, would have to do a console clear
 
-save chat_messages.txt and chat_ids.txt per date, so it doesn't load the one from last stream - done
-
 - use pygame for the loop and pygame_gui for a UI where you can add URLs, blocked words, name exchange, commands
-	reload button, to quickly reload the chrome session, if it breaks
-	fix start stop bug (after stopping, cannot be started again)
-	text field for stream link (gets truncated to just the ID)
+	reload button, to quickly reload the chrome session, if it breaks - done
+	fix start stop bug (after stopping, cannot be started again) - done
+	text field for stream link (gets truncated to just the ID) - done
+	think of more, like styling parameters or login, once that's done
 
 - make UI for the chat, so you have an option to not just have in inside the console
 
-- make commands work
-	need log in for that
-	save log in data in separate file, so it doesn't show in main file
-
-have name exchange list in a file - done
-
-- use a different browser than chrome, something very very lightweight
-
 - check if you can open the files at the start of the script once and then close them at the end, so you don't have to open and close them every single time
 	see what's more efficient
+
+-- make clicking on things work
+	- make commands work
+		need log in for that
+		save log in data in separate file, so it doesn't show in main file
+	- make login work
+	- make better timestamps work
+
+--- use a different browser than chrome, something very very lightweight

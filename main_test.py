@@ -22,7 +22,10 @@ class Program:
 		# Prepare normal window
 		self.screen_width = 1000  # Screen width in pixels
 		self.screen_height = 1000  # Screen height in pixels
-		self.screen = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.RESIZABLE)
+		self.screen = pygame.display.set_mode(
+			(self.screen_width, self.screen_height),
+			pygame.RESIZABLE
+		)
 		pygame.display.set_caption("Youtube Chatbot by Ikxi")
 
 		self.running = True
@@ -118,7 +121,10 @@ class Chat:
 		self.files = Files()
 
 	def run(self):
-		message_list = self.driver.find_elements(By.CSS_SELECTOR, 'yt-live-chat-text-message-renderer')
+		message_list = self.driver.find_elements(
+			By.CSS_SELECTOR,
+			'yt-live-chat-text-message-renderer'
+		)
 		for message in message_list:
 			# Get the ID of the current message
 			# Just 1 ID, not a set of IDs
@@ -138,7 +144,10 @@ class Chat:
 				# Find message and emotes
 				try:
 					# Try to find the text of the message
-					msg_elem = message.find_element(By.CSS_SELECTOR, '#message #message-text yt-formatted-string')
+					msg_elem = message.find_element(
+						By.CSS_SELECTOR,
+						'#message #message-text yt-formatted-string'
+					)
 					msg = msg_elem.text
 					# Find all emotes in the message
 					emotes = message.find_elements(By.CSS_SELECTOR, '#message img')
