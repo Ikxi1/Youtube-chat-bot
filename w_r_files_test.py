@@ -56,8 +56,9 @@ class Files:
 		if not os.path.exists(self.file_message_ids):
 			open(self.file_message_ids, "w").close()
 			print(
-				"Created message_ids file\n" +
-				"All message IDs from "
+				"Created " +
+				self.file_message_ids +
+				"\nAll message IDs from "
 			)
 
 		# Read all message IDs from file
@@ -70,10 +71,7 @@ class Files:
 		if not os.path.exists(dir_raid_ids):
 			os.mkdir(dir_raid_ids)
 			print(
-				"Created raid_ids/ folder\n"
-				"All raid IDs from " +
-				today +
-				" will be saved here"
+				"Created raid_ids/ folder"
 			)
 
 		# Create raid ids file, if none exists

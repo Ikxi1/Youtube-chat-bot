@@ -2,7 +2,7 @@ from datetime import datetime
 import os
 
 # Test variable to not interfere with normal usage
-test = True
+test = False
 if test:
 	test_file = '_test'
 else:
