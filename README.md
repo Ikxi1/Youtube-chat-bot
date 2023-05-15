@@ -1,5 +1,5 @@
 # Youtube-chat-bot
- This is a Youtube chatbot, I think
+ The Youtube chatbot that never breaks
 
  Currently, in active development
 
