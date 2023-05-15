@@ -20,7 +20,7 @@ class Program:
 			(self.screen_width, self.screen_height),
 			pygame.RESIZABLE
 		)
-		pygame.display.set_caption("Youtube Chatbot by Ikxi")
+		pygame.display.set_caption("Youtube Chatbot by Ikxi TEEEEEEEEEEEEEEEEST")
 
 		self.running = True
 		self.clock = pygame.time.Clock()
