@@ -9,3 +9,9 @@ __pycache__/
 .idea/sonarlint/
 test/
 bot_login_keys.py
+chat_test.py
+bot_login_test.py
+main_test.py
+ui_test.py
+url_test.py
+w_r_files_test.py

@@ -56,8 +56,9 @@ class Files:
 		if not os.path.exists(self.file_message_ids):
 			open(self.file_message_ids, "w").close()
 			print(
-				"Created message_ids file\n" +
-				"All message IDs from "
+				"Created " +
+				self.file_message_ids +
+				"\nAll message IDs from "
 			)
 
 		# Read all message IDs from file
@@ -70,10 +71,7 @@ class Files:
 		if not os.path.exists(dir_raid_ids):
 			os.mkdir(dir_raid_ids)
 			print(
-				"Created raid_ids/ folder\n"
-				"All raid IDs from " +
-				today +
-				" will be saved here"
+				"Created raid_ids/ folder"
 			)
 
 		# Create raid ids file, if none exists
@@ -105,7 +103,7 @@ class Files:
 		# Create commands file, if none exists
 		self.file_commands = dir_data + "commands.txt"
 		if not os.path.exists(self.file_commands):
-			open(self.file_commands, "w").close()
+			open(self.file_commands, "w", encoding='utf-8').close()
 			print(
 				"Created commands file\n"
 				"Consider adding commands to the file\n"
@@ -113,7 +111,7 @@ class Files:
 			)
 
 		# Read all commands from file
-		with open(self.file_commands, "r") as f:
+		with open(self.file_commands, "r", encoding='utf-8') as f:
 			self.commands = {}
 			for line in f:
 				# Split the lines at µ
@@ -124,7 +122,6 @@ class Files:
 				# Check if there are any characters
 				text = parts[1] if len(parts) > 1 else ""
 				self.commands[command] = text
-
 
 		# Read name exchange list
 		self.file_name_exchanges = dir_data + "name_exchanges.txt"
