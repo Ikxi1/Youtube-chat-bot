@@ -9,13 +9,11 @@
 
  How to use:
  - Download Python 3.11 or higher
- - Install Python packages ``pip install <package>``:
+ - Install necessary Python packages ``pip install <package>``:
    - Selenium
    - Re
-   - Pygame
-   - Pygame_Gui
  - Rename the "bot_login_keys_example.py" file to "bot_login_keys.py"
  - Write the email and password of the google account that you want to use as your chatbot 
-   - I do not recommend you to use your normal yt account (the 
+   - I do not recommend you to use your normal yt account
    - If you make a new account, you need to make a youtube channel, so the bot can write in chat
   - Run the main.py ``python main.py``
