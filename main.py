@@ -23,7 +23,7 @@ class Program(tk.Tk):
 		font = tkfont.Font(family='Circular Std', size=30)
 		self.option_add("*Font", font)
 
-		button_image = Image.open("assets/button_2.png")
+		button_image = Image.open("assets/button_start_chat.png")
 		button_new_size = (button_image.width // 2, button_image.height // 2)
 		button_image_resized = button_image.resize(button_new_size)
 		self.button_image = ImageTk.PhotoImage(button_image_resized)
@@ -40,9 +40,7 @@ class Program(tk.Tk):
 		self.button_start = tk.Button(
 			self,
 			command=self.chat_init,
-			image=self.button_image,
-			text='Start Chat',
-			compound='center'
+			image=self.button_image
 		)
 		self.button_start["bg"] = "white"
 		self.button_start["border"] = "0"
@@ -72,8 +70,11 @@ class Program(tk.Tk):
 		self.loop_thread.start()
 
 	def chat_stop(self):
-		if self.chat.running:
-			self.chat.running = False
+		try:
+			if self.chat.running:
+				self.chat.running = False
+		except:
+			pass
 
 	def chat_reload(self):
 		if self.chat.running:
@@ -88,6 +89,7 @@ class Program(tk.Tk):
 
 	def stop_program(self):
 		self.chat_stop()
+
 		self.quit()
 
 

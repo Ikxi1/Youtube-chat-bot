@@ -140,9 +140,6 @@ class Files:
 				replaced_name = parts[1] if len(parts) > 1 else ""
 				self.exchange_names[original_name] = replaced_name
 
-		for i in sorted_chat_messages:
-			print(i)
-
 	def write_messages(self, chat_message):
 		# Method for writing chat messages back to file
 		self.chat_messages.add(chat_message)

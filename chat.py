@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 import re
+import time
 from w_r_files import Files
 import bot_login
 from chat_ui import ChatUI
@@ -33,6 +34,7 @@ class Chat:
 
 		self.timestamp_button = self.driver.find_element(By.XPATH, '//*[@id="live-chat-header-context-menu"]')
 		self.timestamp_button.click()
+		time.sleep(1)
 		self.timestamp_button = self.driver.find_element(By.XPATH, "/html/body/yt-live-chat-app/tp-yt-iron-dropdown/div/ytd-menu-popup-renderer/tp-yt-paper-listbox/ytd-menu-service-item-renderer[2]/tp-yt-paper-item")
 		self.timestamp_button.click()
 
@@ -41,6 +43,7 @@ class Chat:
 		self.chat_ui = ChatUI()
 
 	def run(self):
+		message_id = ''
 		while self.running:
 			message_list = self.driver.find_elements(
 				By.CSS_SELECTOR,
@@ -50,18 +53,22 @@ class Chat:
 				# Get the ID of the current message
 				# Just 1 ID, not a set of IDs
 				# Just a string
-				message_id = message.get_attribute('id')
+				try:
+					message_id = message.get_attribute('id')
+				except:
+					pass
 				# Check if the message has already been processed
 				if message_id not in self.files.message_ids:
-					# The timestamps don't work when you reload the script, they only then show the current time, not when the message was sent
-					# timestamp = datetime.now().strftime("%H:%M:%S")
-					timestamp = message.find_element(By.CSS_SELECTOR, '#timestamp').text
+					try:
+						timestamp = message.find_element(By.CSS_SELECTOR, '#timestamp').text
+					except:
+						timestamp = ''
 
 					# Find username
-					username = message.find_element(By.CSS_SELECTOR, '#author-name').text
-					if username == "":
-						self.missed_name += 1
-						break
+					try:
+						username = message.find_element(By.CSS_SELECTOR, '#author-name').text
+					except:
+						username = 'none'
 
 					if username == "Ikxi_Bot":
 						self.files.write_message_ids(message_id)
@@ -69,34 +76,38 @@ class Chat:
 
 					# Find message and emotes
 					try:
-						# Try to find the text of the message
-						msg_elem = message.find_element(
-							By.CSS_SELECTOR,
-							'#message #message-text yt-formatted-string'
-						)
-						msg = msg_elem.text
-						# Find all emotes in the message
-						emotes = message.find_elements(By.CSS_SELECTOR, '#message img')
-						# Loop through all the emotes in reverse order
-						for emote in emotes[::-1]:
-							alt_text = emote.get_attribute('alt')
-							# Find the index of the emote in the original message text
-							emote_index = msg_elem.get_attribute('innerHTML').index(emote.get_attribute('outerHTML'))
-							# Insert the emote at its original position in the message text
-							msg = msg[:emote_index] + ':' + alt_text + ':' + msg[emote_index:]
+						try:
+							# Try to find the text of the message
+							msg_elem = message.find_element(
+								By.CSS_SELECTOR,
+								'#message #message-text yt-formatted-string'
+							)
+							msg = msg_elem.text
+
+							# Find all emotes in the message
+							emotes = message.find_elements(By.CSS_SELECTOR, '#message img')
+							# Loop through all the emotes in reverse order
+							for emote in emotes[::-1]:
+								alt_text = emote.get_attribute('alt')
+								# Find the index of the emote in the original message text
+								emote_index = msg_elem.get_attribute('innerHTML').index(emote.get_attribute('outerHTML'))
+								# Insert the emote at its original position in the message text
+								msg = msg[:emote_index] + ':' + alt_text + ':' + msg[emote_index:]
+						except:
+							# If the text is not found, use the HTML of the message
+							html = message.find_element(By.CSS_SELECTOR, '#message').get_attribute('innerHTML')
+							msg = re.sub('<[^<]+?>', '', html)
+							# Find all emotes in the message
+							emotes = message.find_elements(By.CSS_SELECTOR, '#message img')
+							# Loop through all the emotes in reverse order
+							for emote in emotes[::-1]:
+								alt_text = emote.get_attribute('alt')
+								# Find the index of the emote in the original message text
+								emote_index = html.index(emote.get_attribute('outerHTML'))
+								# Insert the emote at its original position in the message text
+								msg = msg[:emote_index] + ':' + alt_text + ':' + msg[emote_index:]
 					except:
-						# If the text is not found, use the HTML of the message
-						html = message.find_element(By.CSS_SELECTOR, '#message').get_attribute('innerHTML')
-						msg = re.sub('<[^<]+?>', '', html)
-						# Find all emotes in the message
-						emotes = message.find_elements(By.CSS_SELECTOR, '#message img')
-						# Loop through all the emotes in reverse order
-						for emote in emotes[::-1]:
-							alt_text = emote.get_attribute('alt')
-							# Find the index of the emote in the original message text
-							emote_index = html.index(emote.get_attribute('outerHTML'))
-							# Insert the emote at its original position in the message text
-							msg = msg[:emote_index] + ':' + alt_text + ':' + msg[emote_index:]
+						msg = ''
 
 					# Name substitutions
 					if username in self.files.exchange_names:
@@ -115,7 +126,7 @@ class Chat:
 					self.full_message = timestamp + ' : ' + username + ' : ' + msg
 					# Print the message
 					self.chat_ui.display_message(self.full_message)
-					print(self.full_message)
+					# print(self.full_message)
 
 					# Write number of times a name was missed
 					if self.missed_name > 0:
