@@ -45,3 +45,5 @@ make clicking on things work - done
 	you need to add a in front oh all the hours 0-9
 
 - add @ to commands
+
+- have the bot also do a raid print

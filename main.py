@@ -1,102 +1,97 @@
 # Always write YouTube as Youtube
 # Never fucking write YouTube
 
-import pygame
-import pygame_gui
+import tkinter as tk
+import tkinter.font as tkfont
 import time
-from ui import UI
-from url import get_youtube_id
+import threading
+from PIL import Image, ImageTk
 from chat import Chat
+from url import get_youtube_id
 
 
-class Program:
+# https://www.phind.com/search?cache=a5745e4a-a263-4cfd-baea-d66637c5174c
+class Program(tk.Tk):
 	def __init__(self):
-		# Prepare normal window
-		self.screen_width = 1000  # Screen width in pixels
-		self.screen_height = 1000  # Screen height in pixels
-		self.screen = pygame.display.set_mode(
-			(self.screen_width, self.screen_height),
-			pygame.RESIZABLE
-		)
-		pygame.display.set_caption("Youtube Chatbot by Ikxi")
+		super().__init__()
 
-		self.running = True
-		self.clock = pygame.time.Clock()
-		self.framerate = 30
+		self.geometry("1000x500")
 
+		self.valid_url = False
 		self.chat_running = False
 
-		self.stream_id = ''
-		self.valid_url = False
+		font = tkfont.Font(family='Circular Std', size=30)
+		self.option_add("*Font", font)
 
-	def run(self):
-		print("program running")
-		while self.running:
-			time_delta = self.clock.tick(self.framerate) / 1000.0
+		button_image = Image.open("assets/button_2.png")
+		button_new_size = (button_image.width // 2, button_image.height // 2)
+		button_image_resized = button_image.resize(button_new_size)
+		self.button_image = ImageTk.PhotoImage(button_image_resized)
 
-			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					self.chat_stop()
-					self.running = False
-				elif event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_ESCAPE:
-						self.chat_stop()
-						self.running = False
-					if event.key == pygame.K_g and not self.chat_running:
-						self.chat_run()
+		self.label_url = tk.Label(self, text='Copy your stream URL here\nExample: https://www.youtube.com/watch?v=EX75DyJvE8g')
+		self.label_url.pack()
 
-				# Trying to start the script after stopping it crashes
-				elif event.type == pygame_gui.UI_BUTTON_PRESSED:
-					if event.ui_element == ui.button_start and not self.chat_running:
-						self.chat_run()
-					elif event.ui_element == ui.button_stop and self.chat_running:
-						self.chat_stop()
-					elif event.ui_element == ui.button_reload and self.chat_running:
-						self.chat_reload()
+		self.entry_url = tk.Entry(self)
+		self.entry_url.pack()
 
-				ui.manager.process_events(event)
+		self.label_valid_url = tk.Label(self, text='')
+		self.label_valid_url.pack()
 
-			if self.chat_running:
-				self.chat.run()
+		self.button_start = tk.Button(
+			self,
+			command=self.chat_init,
+			image=self.button_image,
+			text='Start Chat',
+			compound='center'
+		)
+		self.button_start["bg"] = "white"
+		self.button_start["border"] = "0"
+		self.button_start.pack()
 
-			self.screen.fill((0, 0, 0))
-			ui.manager.update(time_delta)
-			ui.manager.draw_ui(self.screen)
-			pygame.display.update()
+		self.button_reload = tk.Button(self, text='Reload Chat', command=self.chat_reload)
+		self.button_reload.pack()
+
+		self.button_stop = tk.Button(self, text='Stop Chat', command=self.chat_stop)
+		self.button_stop.pack()
+
+		self.button_quit = tk.Button(self, text='Quit Program', command=self.stop_program)
+		self.button_quit.pack()
+
+	def chat_init(self):
+		self.valid_url, stream_id = get_youtube_id(self.entry_url.get())
+		if self.valid_url:
+			self.label_valid_url.config(text="Valid URL")
+			self.chat = Chat(stream_id)
+			self.loop_thread = threading.Thread(target=self.chat.run)
+			self.chat.running = True
+			self.chat_run()
+		else:
+			self.label_valid_url.config(text="Invalid URL")
 
 	def chat_run(self):
-		url = ui.textfield_url.get_text()
-		self.valid_url, self.stream_id = get_youtube_id(url)
-		if self.valid_url:
-			ui.label_validurl.set_text("Valid URL")
-			self.chat = Chat(self.stream_id)
-			self.chat_running = True
-		else:
-			ui.label_validurl.set_text("Invalid URL")
+		self.loop_thread.start()
 
 	def chat_stop(self):
-		self.chat_running = False
-		self.chat.driver.quit()
+		if self.chat.running:
+			self.chat.running = False
 
 	def chat_reload(self):
+		if self.chat.running:
+			self.chat_stop()
+			print("Chat reloading")
+			time.sleep(1)
+			print("...")
+			time.sleep(1)
+			print("...")
+			self.chat_init()
+			print("Chat reloaded")
+
+	def stop_program(self):
 		self.chat_stop()
-		print("Reloading chat")
-		time.sleep(1)
-		print("3")
-		time.sleep(1)
-		print("2")
-		time.sleep(1)
-		print("1")
-		self.chat_run()
-		print("Chat reloaded")
+		self.quit()
 
 
-# Initiate and execute classes
-pygame.init()
-program = Program()
+root = Program()
 print("program initiated")
-ui = UI(program.screen_width, program.screen_height)
-print("ui initiated")
-program.run()
-# Quit the pygame
-pygame.quit()
+# mainloop is a tkinter method, runs application's main event loop
+root.mainloop()
