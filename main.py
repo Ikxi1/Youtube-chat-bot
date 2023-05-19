@@ -4,11 +4,9 @@
 import pygame
 import pygame_gui
 import time
-from ui_test import UI
-from url_test import get_youtube_id
-from chat_test import Chat
-
-pygame.init()
+from ui import UI
+from url import get_youtube_id
+from chat import Chat
 
 
 class Program:
@@ -94,6 +92,7 @@ class Program:
 
 
 # Initiate and execute classes
+pygame.init()
 program = Program()
 print("program initiated")
 ui = UI(program.screen_width, program.screen_height)
