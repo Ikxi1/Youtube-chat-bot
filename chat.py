@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 import re
 import time
+import threading
 from w_r_files import Files
 import bot_login
 from chat_ui import ChatUI
@@ -125,8 +126,10 @@ class Chat:
 					# Add all parts to full message
 					self.full_message = timestamp + ' : ' + username + ' : ' + msg
 					# Print the message
-					self.chat_ui.display_message(self.full_message)
+					# self.chat_ui.display_message(self.full_message)
 					# print(self.full_message)
+					t = threading.Thread(target=lambda: self.chat_ui.add_label(self.full_message))
+					t.start()
 
 					# Write number of times a name was missed
 					if self.missed_name > 0:
@@ -156,6 +159,7 @@ class Chat:
 					# and write it to the file
 					self.files.write_message_ids(message_id)
 		self.driver.quit()
+		self.chat_ui.destroy()
 
 	def stop(self):
 		self.running = False

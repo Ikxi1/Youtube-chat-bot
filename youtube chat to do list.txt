@@ -13,20 +13,20 @@ save chat_messages.txt and chat_ids.txt per date, so it doesn't load the one fro
 
 have name exchange list in a file - done
 
-- figure out how to deal with deleted messages
+figure out how to deal with deleted messages - done
     currently the script just breaks when a message gets deleted
         no it doesn't, probably because all the messages get saved now
     expected behaviour: the script continues and messages get deleted out of chat_messages.txt
     and deleted from the console (might have to clear console/restart console and read messages from file again)
         can't just delete a single line in the console, would have to do a console clear
 
-- use pygame for the loop and pygame_gui for a UI where you can add URLs, blocked words, name exchange, commands
+use pygame for the loop and pygame_gui for a UI where you can add URLs, blocked words, name exchange, commands - no pygame anymore
 	reload button, to quickly reload the chrome session, if it breaks - done
 	fix start stop bug (after stopping, cannot be started again) - done
 	text field for stream link (gets truncated to just the ID) - done
 	think of more, like styling parameters or login, once that's done
 
-- make UI for the chat, so you have an option to not just have in inside the console
+- make UI for the chat, so you have an option to not just have in inside the console - in progress
 	when displaying the messages on a screen, make sure to keep their msg_id with them, so that when a message gets deleted it can also be deleted from the chat interface and not be shown anymore
 
 - check if you can open the files at the start of the script once and then close them at the end, so you don't have to open and close them every single time
@@ -47,3 +47,5 @@ make clicking on things work - done
 - add @ to commands
 
 - have the bot also do a raid print
+
+- reload doesn't refresh the chat_ui tkinter window

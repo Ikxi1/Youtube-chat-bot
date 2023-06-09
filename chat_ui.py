@@ -1,7 +1,10 @@
+# this file shows the chat messages
+
 import tkinter as tk
+import customtkinter as ctk
 import tkinter.font as tkfont
 
-num_labels = 40
+num_labels = 30
 
 
 class ChatUI(tk.Toplevel):
@@ -10,7 +13,7 @@ class ChatUI(tk.Toplevel):
 
 		self.geometry("500x1000")
 
-		font = tkfont.Font(family='Circular Std', size=10)
+		font = tkfont.Font(family='Circular Std', size=15)
 		self.option_add("*Font", font)
 
 		self.labels = []
@@ -21,7 +24,7 @@ class ChatUI(tk.Toplevel):
 			self.label_texts.append(label_text)
 
 			label = tk.Label(self, textvariable=label_text)
-			label.pack()
+			label.place(x=0, y=i * 25)  # Set the initial position of the label
 			self.labels.append(label)
 
 	def display_message(self, full_message):

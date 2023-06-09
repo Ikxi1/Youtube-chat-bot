@@ -3,6 +3,7 @@
 
 import tkinter as tk
 import tkinter.font as tkfont
+import customtkinter as ctk
 import time
 import threading
 from PIL import Image, ImageTk
@@ -10,50 +11,72 @@ from chat import Chat
 from url import get_youtube_id
 
 
-# https://www.phind.com/search?cache=a5745e4a-a263-4cfd-baea-d66637c5174c
-class Program(tk.Tk):
+class Program(ctk.CTk):
 	def __init__(self):
 		super().__init__()
 
-		self.geometry("1000x500")
+		# self.geometry("1000x500")
 
 		self.valid_url = False
 		self.chat_running = False
 
-		font = tkfont.Font(family='Circular Std', size=30)
-		self.option_add("*Font", font)
+		font1 = ctk.CTkFont(family='Roboto', size=30, weight='bold')
+		font2 = ctk.CTkFont(family='Roboto', size=24)
 
-		button_image = Image.open("assets/button_start_chat.png")
-		button_new_size = (button_image.width // 2, button_image.height // 2)
-		button_image_resized = button_image.resize(button_new_size)
-		self.button_image = ImageTk.PhotoImage(button_image_resized)
+		self.frame = ctk.CTkFrame(self)
+		self.frame.pack(padx=20, pady=20, expand=True, fill="both")
 
-		self.label_url = tk.Label(self, text='Copy your stream URL here\nExample: https://www.youtube.com/watch?v=EX75DyJvE8g')
-		self.label_url.pack()
+		self.label_url = ctk.CTkLabel(self.frame, font=font1, text='Stream URL:')
+		self.label_url.pack(padx=2, pady=2)
 
-		self.entry_url = tk.Entry(self)
-		self.entry_url.pack()
+		self.entry_url = ctk.CTkEntry(self.frame, width=700, font=font1, placeholder_text='https://www.youtube.com/watch?v=***********')
+		self.entry_url.pack(padx=2, pady=2)
 
-		self.label_valid_url = tk.Label(self, text='')
-		self.label_valid_url.pack()
+		button_width = 275
+		button_height = 55
 
-		self.button_start = tk.Button(
-			self,
+		self.button_start = ctk.CTkButton(
+			self.frame,
+			text='Start Chat',
 			command=self.chat_init,
-			image=self.button_image
+			font=font1,
+			width=button_width,
+			height=button_height
 		)
-		self.button_start["bg"] = "white"
-		self.button_start["border"] = "0"
-		self.button_start.pack()
+		self.button_start.pack(padx=2, pady=2)
 
-		self.button_reload = tk.Button(self, text='Reload Chat', command=self.chat_reload)
-		self.button_reload.pack()
+		self.button_reload = ctk.CTkButton(
+			self.frame,
+			text='Reload Chat',
+			command=self.chat_reload,
+			font=font1,
+			width=button_width,
+			height=button_height
+		)
+		self.button_reload.pack(padx=2, pady=2)
 
-		self.button_stop = tk.Button(self, text='Stop Chat', command=self.chat_stop)
-		self.button_stop.pack()
+		self.button_stop = ctk.CTkButton(
+			self.frame,
+			text='Stop Chat',
+			command=self.chat_stop,
+			font=font1,
+			width=button_width,
+			height=button_height
+		)
+		self.button_stop.pack(padx=2, pady=2)
 
-		self.button_quit = tk.Button(self, text='Quit Program', command=self.stop_program)
-		self.button_quit.pack()
+		self.button_quit = ctk.CTkButton(
+			self.frame,
+			text='Quit Program',
+			command=self.stop_program,
+			font=font1,
+			width=button_width,
+			height=button_height
+		)
+		self.button_quit.pack(padx=2, pady=2)
+
+		# self.label_valid_url = tk.Label(self, text='')
+		# self.label_valid_url.pack()
 
 	def chat_init(self):
 		self.valid_url, stream_id = get_youtube_id(self.entry_url.get())
